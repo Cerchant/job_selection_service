@@ -1,0 +1,10 @@
+{
+  "users": [
+    {
+      "id": "bbc71f29-a146-4756-bcab-283cc219a133",
+      "mail": "test@mail.com",
+      "password": "123",
+      "CVes": []
+    }
+  ]
+}
