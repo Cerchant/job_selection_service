@@ -1,0 +1,89 @@
+body{
+    padding: 0;
+    margin: 0;
+}
+
+header{
+    background-color: #FFEBEB;
+    height: 75px;
+}
+
+ul{
+    list-style: none;
+    margin: 0;
+    padding: 20px;
+}
+
+div.logo{
+    float: left;
+    margin-top: 12.5px;
+}
+
+a{
+    font-family: 'Arial', 'Verdana', sans-serif;
+    font-size: 20px;
+    padding: 20px;
+    color: #000000;
+    text-decoration: none;
+}
+
+a:hover{
+    color: #FFCF48;
+    text-decoration: none;
+}
+
+li{
+    display: inline;
+}
+
+.background_image{
+    position: relative;
+}
+
+input.search{
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 100;
+}
+
+
+
+/* body {
+    font-size: 40;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: 80;
+}
+
+p.form_auth_block_head_text {
+    position: absolute;
+    top: 50%;
+    transform: translate(0, -50%)
+}
+
+
+.div_form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #eeeeee;
+    padding: 50px;
+    border-radius: 20px;
+}
+
+table {
+    border-collapse: separate;
+}
+
+td,
+th {
+    border: 3px solid #aaaaaa;
+    padding: 16px;
+    text-align: left;
+    text-align: top;
+}
+
+th {
+    background-color: #eeeeee;
+} */

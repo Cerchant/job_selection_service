@@ -1,5 +1,4 @@
 import pydantic
-from datetime import datetime
 import uuid
 
 class CV(pydantic.BaseModel):

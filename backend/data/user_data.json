@@ -1,10 +1,107 @@
 {
   "users": [
     {
-      "id": "bbc71f29-a146-4756-bcab-283cc219a133",
-      "mail": "test@mail.com",
+      "id": "0f078f49-5d96-45ed-859d-907278ba2ae0",
+      "mail": "test@mail.ru",
       "password": "123",
-      "CVes": []
+      "CVes": [
+        "f1151ee0-9c8a-437a-b27b-98b5fdb69c37",
+        "a1a70660-66ca-471e-abc4-38b13e3fdcbe",
+        "d45b3b6c-6806-4c99-b09c-4e17732d3fa9",
+        "c5d607e7-a580-4d3a-9904-8459ef7b30be"
+      ],
+      "role_id": 1
+    },
+    {
+      "id": "13f424d7-ffd8-4310-84e1-e7fa186a4b68",
+      "mail": "test8816@mail.ru",
+      "password": "123",
+      "CVes": [],
+      "role_id": 1
+    },
+    {
+      "id": "ded9de4a-f554-4615-83b9-60971c68ccb0",
+      "mail": "test5735@mail.ru",
+      "password": "123",
+      "CVes": [],
+      "role_id": 1
+    },
+    {
+      "id": "40051310-b1b5-4f24-a87c-aa09e7b32ac5",
+      "mail": "test7864@mail.ru",
+      "password": "123",
+      "CVes": [],
+      "role_id": 1
+    },
+    {
+      "id": "e469f110-6143-43a7-a71e-8a3bda88fcd6",
+      "mail": "test9035@mail.ru",
+      "password": "123",
+      "CVes": [],
+      "role_id": 1
+    },
+    {
+      "id": "abd7ccdd-06c9-426f-bc25-6b8a6cd5b689",
+      "mail": "test9584@mail.ru",
+      "password": "123",
+      "CVes": [],
+      "role_id": 1
+    },
+    {
+      "id": "b9889aad-546d-4967-88ff-11c4e715a701",
+      "mail": "test7805@mail.ru",
+      "password": "123",
+      "CVes": [],
+      "role_id": 1
+    },
+    {
+      "id": "032b4334-9bae-47cf-8e3d-3b59777b1929",
+      "mail": "test3702@mail.ru",
+      "password": "123",
+      "CVes": [],
+      "role_id": 1
+    },
+    {
+      "id": "f5671d03-fa24-4030-b857-19e8ccf41d7d",
+      "mail": "test5880@mail.ru",
+      "password": "123",
+      "CVes": [],
+      "role_id": 1
+    },
+    {
+      "id": "500e4418-0f9e-41d2-bf86-8f93d3b477f1",
+      "mail": "test5784@mail.ru",
+      "password": "123",
+      "CVes": [],
+      "role_id": 1
+    },
+    {
+      "id": "dd76c5e0-ecbc-459a-a07c-d0ae94112ee6",
+      "mail": "test8229@mail.ru",
+      "password": "123",
+      "CVes": [],
+      "role_id": 1
+    },
+    {
+      "id": "06403b90-c309-4e81-8b13-694926f2bfbe",
+      "mail": "test5638@mail.ru",
+      "password": "123",
+      "CVes": [],
+      "role_id": 1
+    },
+    {
+      "id": "e497f5c7-0f09-471d-b019-a1e43c3b4f2a",
+      "mail": "test7948@mail.ru",
+      "password": "123",
+      "CVes": [],
+      "role_id": 1
+    },
+    {
+      "id": "0408436d-e4c0-4b4a-8328-0eb0821d5fc8",
+      "mail": "test4264@mail.ru",
+      "password": "123",
+      "CVes": [],
+      "role_id": 1
     }
   ]
 }

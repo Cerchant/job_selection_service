@@ -9,6 +9,7 @@ class UserService:
     def __init__(self) -> None:
         ...
     
+
     def _valid_mail(self, mail: str) -> bool:
         pattern = r"^[-\w\.]+@([-\w]+\.)+[-\w]{2,4}$"
 
@@ -16,6 +17,7 @@ class UserService:
             return True
         else:
             return False
+
 
     def get_users(self) -> list[User]:
         with open('data/user_data.json') as user_file:
@@ -28,12 +30,14 @@ class UserService:
                     id=user["id"],
                     mail=user["mail"],
                     password=user["password"],
-                    CVes=user["CVes"]
+                    CVes=user["CVes"],
+                    role_id=user["role_id"]
                 )
             )
 
         return users
-    
+
+
     def get_CV(self, creds: Creds) -> list[CV]:
         with open('data/user_data.json') as user_file:
             self.user_data = json.load(user_file)
@@ -47,6 +51,7 @@ class UserService:
                     if (CV["id"] in user["CVes"]):
                         CVes.append(CV)
         return CVes
+
 
     def update_user(self, id: uuid.UUID, creds: UserUpdate) -> User:
         if auth_user := self._auth(creds.auth):
@@ -65,7 +70,8 @@ class UserService:
                         id=user["id"],
                         mail=user["mail"],
                         password=user["password"],
-                        CVes=user["CVes"]
+                        CVes=user["CVes"],
+                        role_id=user["role_id"]
                     )
 
         raise ValueError()
@@ -75,16 +81,17 @@ class UserService:
         with open('data/user_data.json') as user_file:
             self.user_data=json.load(user_file)
         for user in self.user_data["users"]:
-            print(user, "AAAAAA")
             if user["mail"] == creds.mail and user["password"] == creds.password:
                 return User(
                     id=user["id"],
                     mail=user["mail"],
                     password=user["password"],
-                    CVes=user["CVes"]
+                    CVes=user["CVes"],
+                    role_id=user["role_id"]
                 )
         return None
     
+
     def register(self, creds: Creds) -> User | str:
         if self._valid_mail(creds.mail) == False:
             return "Uncorrect email form"
@@ -96,7 +103,8 @@ class UserService:
             "id": str(uuid.uuid4()),
             "mail": creds.mail,
             "password": creds.password,
-            "CVes": []
+            "CVes": [],
+            "role_id": 1
         }
         self.data["users"].append(user)
         with open('data/user_data.json', "w") as file:
@@ -105,9 +113,11 @@ class UserService:
             id=user["id"],
             mail=user["mail"],
             password=user["password"],
-            CVes=user["CVes"]
+            CVes=user["CVes"],
+            role_id=user["role_id"]
         )
     
+
     def _CV_exist(self, creds: Creds, CV_title: str) -> CV | None:
         with open('data/user_data.json') as user_file:
             self.data=json.load(user_file)
@@ -122,12 +132,14 @@ class UserService:
 
         return None
     
+
     def login(self, creds: Creds) -> User:
         auth_user = self._auth(creds)
         if auth_user == None:
             return "User is not found"
         return auth_user
     
+
     def create_CV(self, creds: Creds, CV_title: str, surname: str,
                   name: str, patronymic: str, date_of_birth: str,
                   gender: str, city: str, salary: str, skills: list[str]) -> CV | None:
@@ -164,7 +176,44 @@ class UserService:
                 
         return None
     
-            
+
+    def edit_CV(self, creds: Creds, CV_title: str, surname: str,
+                  name: str, patronymic: str, date_of_birth: str,
+                  gender: str, city: str, salary: str, skills: list[str]) -> CV | None:
+        with open('data/user_data.json') as user_file:
+            self.user_data=json.load(user_file)
+        with open('data/CV_data.json') as CV_file:
+            self.CV_data=json.load(CV_file)
+
+        
+        check_CV = self._CV_exist(creds, CV_title)
+        if check_CV:
+            for user in self.user_data["users"]:
+                if user["mail"] == creds.mail and user["password"] == creds.password:
+                    for CV in self.CV_data["CVes"]:
+
+                        if (CV["title"] == CV_title) and (CV["id"] in user["CVes"]):
+
+                            CV["title"] = CV_title
+                            CV["surname"] = surname
+                            CV["name"] = name
+                            CV["patronymic"] = patronymic
+                            CV["date_of_birth"] = date_of_birth
+                            CV["gender"] = gender
+                            CV["city"] = city
+                            CV["salary"] = salary
+                            CV["skills"] = skills
+
+                            with open('data/user_data.json', "w") as user_file:
+                                json.dump(self.user_data, user_file, indent=2, ensure_ascii=False)
+                            with open('data/CV_data.json', "w") as CV_file:
+                                json.dump(self.CV_data, CV_file, indent=2, ensure_ascii=False)
+
+                            return CV
+                
+        return None
+    
+           
     def delete_CV(self, creds: Creds, CV_title: str) -> CV:
         with open('data/user_data.json') as user_file:
             self.user_data=json.load(user_file)
@@ -183,5 +232,18 @@ class UserService:
                             json.dump(self.CV_data, CV_file, indent=2, ensure_ascii=False)
 
                         return CV
-      
+    
+
+    def search_CV_by_title(self, title: str) -> list[CV]:
+        with open('data/CV_data.json') as CV_file:
+            self.CV_data=json.load(CV_file)
+        
+        CVes = []
+        for CV in self.CV_data["CVes"]:
+            print(CV)
+            if (CV["title"] == title):
+                CVes.append(CV)
+        return CVes
+
+
 user_service: UserService = UserService()

@@ -77,3 +77,26 @@ def delete_CV(
     creds: Creds = Creds(mail=mail,
                  password=password) 
     return user_service.delete_CV(creds, CV_title)
+
+@router.put(
+    "/CVes/{id}",
+    status_code=200,
+    response_model=CV,
+)
+def edit_CV(mail: str, password: str, title: str, surname: str,
+            name: str, patronymic: str, date_of_birth: str,
+            gender: str, city: str, salary: str, skills: list[str]):
+    creds: Creds = Creds(mail=mail,
+                 password=password) 
+    CV = user_service.edit_CV(creds, title, surname,
+                                name, patronymic, date_of_birth,
+                                gender, city, salary, skills)
+    return CV
+
+@router.post(
+    "/CVes/{title}",
+    status_code=200,
+    response_model=list[CV],
+)
+def search_CV_by_title(title: str):
+    return user_service.search_CV_by_title(title)

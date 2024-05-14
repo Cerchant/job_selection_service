@@ -1,3 +1,32 @@
 {
-  "CVes": []
+  "CVes": [
+    {
+      "id": "f1151ee0-9c8a-437a-b27b-98b5fdb69c37",
+      "title": "Programmer",
+      "surname": "Petrov",
+      "name": "Ivan",
+      "patronymic": "Ivanovich",
+      "date_of_birth": "12.02.2004",
+      "gender": "M",
+      "city": "Tomsk",
+      "salary": "70000",
+      "skills": [
+        "SQL"
+      ]
+    },
+    {
+      "id": "c5d607e7-a580-4d3a-9904-8459ef7b30be",
+      "title": "ssss",
+      "surname": "Петров",
+      "name": "Иван",
+      "patronymic": "Иванович",
+      "date_of_birth": "12.02.2004",
+      "gender": "М",
+      "city": "Томск",
+      "salary": "70000",
+      "skills": [
+        "SQL"
+      ]
+    }
+  ]
 }
