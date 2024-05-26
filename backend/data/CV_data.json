@@ -15,11 +15,39 @@
       ]
     },
     {
-      "id": "c5d607e7-a580-4d3a-9904-8459ef7b30be",
-      "title": "ssss",
-      "surname": "Петров",
-      "name": "Иван",
-      "patronymic": "Иванович",
+      "id": "8bd7fc94-4a14-46a6-92cd-2da972345498",
+      "title": "Petrov",
+      "surname": "Programmer",
+      "name": "Ivan",
+      "patronymic": "Ivanovich",
+      "date_of_birth": "12.02.2004",
+      "gender": "М",
+      "city": "Томск",
+      "salary": "70000",
+      "skills": [
+        "SQL"
+      ]
+    },
+    {
+      "id": "f5e205d2-2abf-4fb5-8ce6-5c0c50b4853e",
+      "title": "Petrov",
+      "surname": "Programmer",
+      "name": "Ivan",
+      "patronymic": "Ivanovich",
+      "date_of_birth": "12.02.2004",
+      "gender": "М",
+      "city": "Томск",
+      "salary": "70000",
+      "skills": [
+        "SQL"
+      ]
+    },
+    {
+      "id": "aa0e7961-9ad8-45ee-b01b-7826fd8dc257",
+      "title": "Petrov",
+      "surname": "Programmer",
+      "name": "Ivan",
+      "patronymic": "Ivanovich",
       "date_of_birth": "12.02.2004",
       "gender": "М",
       "city": "Томск",

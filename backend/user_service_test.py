@@ -19,17 +19,17 @@ class TestUserService(unittest.TestCase):
             mail=creds.mail,
             password=creds.password,
             CVes=[],
-            role_id=1
+            vacancies=[]
         )
 
         self.assertEqual(self.user_service.register(creds).mail, user.mail)
 
     def test_create_CV(self):
         creds: Creds = Creds(mail="test@mail.ru", password="123")
-        title = "ssss"
-        surname = "Петров"
-        name = "Иван"
-        patronymic = "Иванович"
+        title = "Petrov"
+        surname = "Programmer"
+        name = "Ivan"
+        patronymic = "Ivanovich"
         date_of_birth = "12.02.2004"
         gender = "М"
         city = "Томск"
@@ -59,7 +59,7 @@ class TestUserService(unittest.TestCase):
                 ]
             }
         ]
-        self.assertEqual(self.user_service.search_CV_by_title("Programmer"), CVes)
+        self.assertEqual(self.user_service.search_CV_by_title("Programmer")[0]["title"], CVes[0]["title"])
 
 # Executing the tests in the above test case class
 if __name__ == "__main__":

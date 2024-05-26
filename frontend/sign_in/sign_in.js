@@ -43,7 +43,7 @@ submit_registration_button.addEventListener("click", (e) => {
             .then(current_user => {
                 console.log(current_user)
                 localStorage.setItem("user", JSON.stringify(current_user))
-                window.location.href = "../profile/profile.html"
+                window.location.href = "../main_page/main_page.html"
             })
             .catch(err => console.log(err))
     }

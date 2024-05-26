@@ -11,9 +11,7 @@ class User(pydantic.BaseModel):
     mail: str
     password: str
     CVes: list[uuid.UUID]
-    # role_id = 1 - обычный пользователь
-    # role_id = 2 - администратор
-    role_id: int
+    vacancies: list[uuid.UUID]
 
 
 class UserUpdate(pydantic.BaseModel):

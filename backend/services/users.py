@@ -1,5 +1,6 @@
 from schemas.users import User, UserUpdate, Creds
 from schemas.CV import CV
+from schemas.vacancy import vacancy
 import uuid
 import json
 import re
@@ -31,7 +32,7 @@ class UserService:
                     mail=user["mail"],
                     password=user["password"],
                     CVes=user["CVes"],
-                    role_id=user["role_id"]
+                    vacancies=user["vacancies"]
                 )
             )
 
@@ -53,9 +54,24 @@ class UserService:
         return CVes
 
 
-    def update_user(self, id: uuid.UUID, creds: UserUpdate) -> User:
+    def get_vacancy(self, creds: Creds) -> list[vacancy]:
+        with open('data/user_data.json') as user_file:
+            self.user_data = json.load(user_file)
+        with open('data/vacancy_data.json') as vacancy_file:
+            self.vacancy_data = json.load(vacancy_file)
+        vacancies = []
+
+        for user in self.user_data["users"]:
+            if (user["mail"] == creds.mail) and (user["password"] == creds.password):
+                for vacancy in self.vacancy_data["vacancies"]:
+                    if (vacancy["id"] in user["vacancies"]):
+                        vacancies.append(vacancy)
+        return vacancies
+
+
+    def update_user(self, id: str, creds: UserUpdate) -> User:
         if auth_user := self._auth(creds.auth):
-            if auth_user.id != id:
+            if str(auth_user.id) != str(id):
                 raise ValueError()
             
             with open('data/user_data.json') as file:
@@ -71,7 +87,7 @@ class UserService:
                         mail=user["mail"],
                         password=user["password"],
                         CVes=user["CVes"],
-                        role_id=user["role_id"]
+                        vacancies=user["vacancies"]
                     )
 
         raise ValueError()
@@ -87,7 +103,7 @@ class UserService:
                     mail=user["mail"],
                     password=user["password"],
                     CVes=user["CVes"],
-                    role_id=user["role_id"]
+                    vacancies=user["vacancies"]
                 )
         return None
     
@@ -104,7 +120,7 @@ class UserService:
             "mail": creds.mail,
             "password": creds.password,
             "CVes": [],
-            "role_id": 1
+            "vacancies": []
         }
         self.data["users"].append(user)
         with open('data/user_data.json', "w") as file:
@@ -114,11 +130,11 @@ class UserService:
             mail=user["mail"],
             password=user["password"],
             CVes=user["CVes"],
-            role_id=user["role_id"]
+            vacancies=user["vacancies"]
         )
     
 
-    def _CV_exist(self, creds: Creds, CV_title: str) -> CV | None:
+    def _CV_exist(self, creds: Creds, CV_id: str) -> CV | None:
         with open('data/user_data.json') as user_file:
             self.data=json.load(user_file)
         with open('data/CV_data.json') as CV_file:
@@ -127,8 +143,23 @@ class UserService:
         for user in self.user_data["users"]:
             if (user["mail"] == creds.mail) and (user["password"] == creds.password):
                 for CV in self.CV_data["CVes"]:
-                    if (CV["title"] == CV_title) and (CV["id"] in user["CVes"]):
+                    if (CV["id"] == CV_id) and (CV["id"] in user["CVes"]):
                         return CV
+
+        return None
+    
+
+    def _vacancy_exist(self, creds: Creds, vacancy_id: str) -> CV | None:
+        with open('data/user_data.json') as user_file:
+            self.data=json.load(user_file)
+        with open('data/vacancy_data.json') as vacancy_file:
+            self.vacancy_data=json.load(vacancy_file)
+        
+        for user in self.user_data["users"]:
+            if (user["mail"] == creds.mail) and (user["password"] == creds.password):
+                for vacancy in self.CV_data["CVes"]:
+                    if (vacancy["id"] == vacancy_id) and (vacancy["id"] in user["CVes"]):
+                        return vacancy
 
         return None
     
@@ -149,35 +180,33 @@ class UserService:
             self.CV_data=json.load(CV_file)
 
         
-        check_CV = self._CV_exist(creds, CV_title)
-        if check_CV == None:
-            CV = {
-                                "id": str(uuid.uuid4()),
-                                "title": CV_title,
-                                "surname": surname,
-                                "name": name,
-                                "patronymic": patronymic,
-                                "date_of_birth": date_of_birth,
-                                "gender": gender,
-                                "city": city,
-                                "salary": salary,
-                                "skills": skills
-            }
-            for user in self.user_data["users"]:
-                if user["mail"] == creds.mail and user["password"] == creds.password:
-                    user["CVes"].append(str(CV["id"]))
-                    self.CV_data["CVes"].append(CV)
+        CV = {
+            "id": str(uuid.uuid4()),
+            "title": CV_title,
+            "surname": surname,
+            "name": name,
+            "patronymic": patronymic,
+            "date_of_birth": date_of_birth,
+            "gender": gender,
+            "city": city,
+            "salary": salary,
+            "skills": skills
+        }
+        for user in self.user_data["users"]:
+            if user["mail"] == creds.mail and user["password"] == creds.password:
+                user["CVes"].append(str(CV["id"]))
+                self.CV_data["CVes"].append(CV)
 
-                    with open('data/user_data.json', "w") as user_file:
-                        json.dump(self.user_data, user_file, indent=2, ensure_ascii=False)
-                    with open('data/CV_data.json', "w") as CV_file:
-                        json.dump(self.CV_data, CV_file, indent=2, ensure_ascii=False)
-                    return CV
+                with open('data/user_data.json', "w") as user_file:
+                    json.dump(self.user_data, user_file, indent=2, ensure_ascii=False)
+                with open('data/CV_data.json', "w") as CV_file:
+                    json.dump(self.CV_data, CV_file, indent=2, ensure_ascii=False)
+                return CV
                 
         return None
     
 
-    def edit_CV(self, creds: Creds, CV_title: str, surname: str,
+    def edit_CV(self, creds: Creds, CV_id: str, CV_title: str, surname: str,
                   name: str, patronymic: str, date_of_birth: str,
                   gender: str, city: str, salary: str, skills: list[str]) -> CV | None:
         with open('data/user_data.json') as user_file:
@@ -186,7 +215,7 @@ class UserService:
             self.CV_data=json.load(CV_file)
 
         
-        check_CV = self._CV_exist(creds, CV_title)
+        check_CV = self._CV_exist(creds, CV_id)
         if check_CV:
             for user in self.user_data["users"]:
                 if user["mail"] == creds.mail and user["password"] == creds.password:
@@ -240,10 +269,100 @@ class UserService:
         
         CVes = []
         for CV in self.CV_data["CVes"]:
-            print(CV)
             if (CV["title"] == title):
                 CVes.append(CV)
         return CVes
+    
+
+    def create_vacancy(self, creds: Creds, vacancy_title: str, 
+                       city: str, salary: str, skills: list[str]) -> vacancy | None:
+        with open('data/user_data.json') as user_file:
+            self.user_data=json.load(user_file)
+        with open('data/vacancy_data.json') as vacancy_file:
+            self.vacancy_data=json.load(vacancy_file)
+
+        
+        vacancy = {
+            "id": str(uuid.uuid4()),
+            "title": vacancy_title,
+            "city": city,
+            "salary": salary,
+            "skills": skills
+        }
+        for user in self.user_data["users"]:
+            if user["mail"] == creds.mail and user["password"] == creds.password:
+                user["vacancies"].append(str(vacancy["id"]))
+                self.vacancy_data["vacancies"].append(vacancy)
+
+                with open('data/user_data.json', "w") as user_file:
+                    json.dump(self.user_data, user_file, indent=2, ensure_ascii=False)
+                with open('data/vacancy_data.json', "w") as vacancy_file:
+                    json.dump(self.vacancy_data, vacancy_file, indent=2, ensure_ascii=False)
+                return vacancy
+                
+        return None
+    
+
+    def edit_vacancy(self, creds: Creds, vacancy_id: str, vacancy_title: str, 
+                    city: str, salary: str, skills: list[str]) -> vacancy | None:
+        with open('data/user_data.json') as user_file:
+            self.user_data=json.load(user_file)
+        with open('data/vacancy_data.json') as vacancy_file:
+            self.vacancy_data=json.load(vacancy_file)
+
+        
+        check_vacancy = self._vacancy_exist(creds, vacancy_id)
+        if check_vacancy:
+            for user in self.user_data["users"]:
+                if user["mail"] == creds.mail and user["password"] == creds.password:
+                    for vacancy in self.vacancy_data["vacancies"]:
+
+                        if (vacancy["title"] == vacancy_title) and (vacancy["id"] in user["vacancies"]):
+
+                            vacancy["title"] = vacancy_title
+                            vacancy["city"] = city
+                            vacancy["salary"] = salary
+                            vacancy["skills"] = skills
+
+                            with open('data/user_data.json', "w") as user_file:
+                                json.dump(self.user_data, user_file, indent=2, ensure_ascii=False)
+                            with open('data/vacancy_data.json', "w") as vacancy_file:
+                                json.dump(self.vacancy_data, vacancy_file, indent=2, ensure_ascii=False)
+
+                            return vacancy
+                
+        return None
+    
+           
+    def delete_vacancy(self, creds: Creds, vacancy_title: str) -> vacancy:
+        with open('data/user_data.json') as user_file:
+            self.user_data=json.load(user_file)
+        with open('data/vacancy_data.json') as vacancy_file:
+            self.vacancy_data=json.load(vacancy_file)
+
+        for user in self.user_data["users"]:
+            if (user["mail"] == creds.mail and user["password"] == creds.password):
+                for vacancy in self.vacancy_data["vacancies"]:
+                    if (vacancy["title"] == vacancy_title) and (vacancy["id"] in user["vacancies"]):
+                        user["vacancies"].remove(vacancy["id"])
+                        self.vacancy_data["vacancies"].remove(vacancy)
+                        with open('data/user_data.json', "w") as user_file:
+                            json.dump(self.user_data, user_file, indent=2, ensure_ascii=False)
+                        with open('data/vacancy_data.json', "w") as vacancy_file:
+                            json.dump(self.vacancy_data, vacancy_file, indent=2, ensure_ascii=False)
+
+                        return vacancy
+    
+
+    def search_vacancy_by_title(self, title: str) -> list[vacancy]:
+        with open('data/vacancy_data.json') as vacancy_file:
+            self.vacancy_data=json.load(vacancy_file)
+        
+        vacancies = []
+        for vacancy in self.vacancy_data["vacancies"]:
+            if (vacancy["title"] == title):
+                vacancies.append(vacancy)
+        return vacancies
 
 
 user_service: UserService = UserService()

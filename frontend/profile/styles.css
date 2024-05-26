@@ -36,15 +36,9 @@ li{
     display: inline;
 }
 
-.background_image{
-    position: relative;
-}
-
-input.search{
-    position: absolute;
-    top: 0;
-    right: 0;
+input{
     font-size: 100;
+    
 }
 
 
@@ -86,4 +80,4 @@ th {
 
 th {
     background-color: #eeeeee;
-} */
+} */ 

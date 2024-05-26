@@ -1,5 +1,8 @@
 let current_user = JSON.parse(localStorage.getItem("user"))
 
+const search_CV = document.getElement("");
+
+
 //document.write(current_user["mail"])
 const head = document.createElement("p");
 head.innerText = current_user["mail"];
@@ -349,3 +352,87 @@ fetch(url, { method: 'GET', headers: { "Content-Type": "application/json" } })
 document.body.appendChild(mail);
 document.body.appendChild(right);
 document.body.appendChild(tasks_from_another_users);
+
+
+let url = `http://127.0.0.1:8000/tasks?project_id=${current_user_projects[i]["id"]}`;
+fetch(url, { method: 'GET', headers: { "Content-Type": "application/json" } })
+    .then(res => res.json())
+    .then(current_user_tasks => {
+        let task_for_calendar = [];
+        for (let k = 0; k < current_user_tasks.length; k++) {
+            let task = document.createElement("li")
+            let task_span = document.createElement("span")
+            let filling = document.createElement("div")
+
+            task_span.innerText = current_user_tasks[k]["title"]
+
+            const delete_task_button = document.createElement("BUTTON");
+            delete_task_button.innerHTML = "Delete Task";
+
+            delete_task_button.style.padding = "10px";
+            delete_task_button.style.borderRadius = "10px";
+            delete_task_button.style.marginBottom = "10px";
+            delete_task_button.style.background = "#eeeeee";
+            delete_task_button.style.borderColor = "#eeeeee";
+
+            delete_task_button.addEventListener('click', (e) => {
+                e.preventDefault()
+                delete_task_button.onclick = function () {
+                    const url = `http://127.0.0.1:8000/categories/{tasks}?mail=${current_user["mail"]}&password=${current_user["password"]}&category_title=${current_user_categories[j]["title"]}&project_title=${current_user_projects[i]["title"]}&task_title=${current_user_tasks[k]["title"]}`;
+                    fetch(url, { method: 'DELETE', headers: { "Content-Type": "application/json" } })
+                        .then(res => res.json())
+                        .then(task => {
+                            window.location.href = "profile.html"
+                        })
+                        .catch(err => console.log(err))
+                };
+
+            });
+            if (current_user_tasks[k]["executor"] == current_user["mail"] && current_user_tasks[k]["status"] == "in process") {
+                const execute_task_button = document.createElement("BUTTON");
+                execute_task_button.innerHTML = "Execute";
+
+                execute_task_button.style.padding = "10px";
+                execute_task_button.style.borderRadius = "10px";
+                execute_task_button.style.marginBottom = "10px";
+                execute_task_button.style.background = "#eeeeee";
+                execute_task_button.style.borderColor = "#eeeeee";
+
+                execute_task_button.addEventListener('click', (e) => {
+                    e.preventDefault()
+                    execute_task_button.onclick = function () {
+                        const url = `http://127.0.0.1:8000/categories/{tasks}?mail=${current_user["mail"]}&task_title=${current_user_tasks[k]["title"]}`;
+                        fetch(url, { method: 'PUT', headers: { "Content-Type": "application/json" } })
+                            .then(res => res.json())
+                            .then(task => {
+                                window.location.href = "profile.html"
+                            })
+                            .catch(err => console.log(err))
+                    };
+
+                });
+                task_span.appendChild(execute_task_button);
+            }
+            task_span.appendChild(delete_task_button);
+
+            filling.innerText = "\nExecutor: " + current_user_tasks[k]["executor"] +
+                "\nDate: " + current_user_tasks[k]["date"] +
+                "\n\n" + current_user_tasks[k]["comment"] +
+                "\n\n" + current_user_tasks[k]["status"]
+
+            filling.style.paddingLeft = "30px";
+            task_span.appendChild(filling)
+
+            task.style.paddingLeft = "30px";
+            task.style.color = current_user_tasks[k]["urgent_color"];
+            task_span.style.color = "black";
+
+            task_for_calendar = [current_user_categories[j]["color"],
+            current_user_tasks[k]["urgent_color"],
+            current_user_tasks[k]["date"]];
+
+            task.appendChild(task_span)
+            project.appendChild(task)
+        }
+    })
+    .catch(err => console.log(err))
